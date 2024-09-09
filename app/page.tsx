@@ -1,101 +1,130 @@
-import Image from "next/image";
+'use client'
+
+import { useState } from 'react'
+import Image from 'next/image'
 
 export default function Home() {
+  const [maxPrice, setMaxPrice] = useState(2500)
+  const [partySize, setPartySize] = useState(1)
+  const [location, setLocation] = useState('')
+  const [searchResults, setSearchResults] = useState([])
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const searchParams = { maxPrice, partySize, location }
+    
+    try {
+      const response = await fetch('/api/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(searchParams),
+      })
+      
+      if (!response.ok) {
+        throw new Error('Search failed')
+      }
+      
+      const results = await response.json()
+      setSearchResults(results)
+    } catch (error) {
+      console.error('Error during search:', error)
+      // Handle error (e.g., show error message to user)
+    }
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+    <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-black text-white">
+      <div className="mb-8">
         <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
+          src="/homepage-logo.png"
+          alt="Golf Getaways"
+          width={300}
+          height={100}
           priority
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+      </div>
+      <form onSubmit={handleSearch} className="w-full max-w-md space-y-6">
+        <div className="flex space-x-4">
+          <div className="flex-1">
+            <div className="h-6">
+              <label htmlFor="price-range" className="block text-sm font-medium">
+                Max Price Per Person: ${maxPrice}
+              </label>
+            </div>
+            <div className="relative">
+              <div 
+                className="absolute inset-0 rounded-full" 
+                style={{
+                  background: `linear-gradient(to right, #1a4d2e 0%, #1a4d2e ${maxPrice / 50}%, #d3d3d3 ${maxPrice / 50}%, #d3d3d3 100%)`,
+                  pointerEvents: 'none'
+                }}
+              ></div>
+              <input
+                type="range"
+                id="price-range"
+                min="100"
+                max="5000"
+                step="100"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(Number(e.target.value))}
+                className="w-full appearance-none bg-transparent cursor-pointer relative z-10"
+              />
+            </div>
+          </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+          <div>
+            <div className="h-6">
+              <label htmlFor="party-size" className="block text-sm font-medium">
+                Party Size
+              </label>
+            </div>
+            <input
+              type="number"
+              id="party-size"
+              value={partySize}
+              onChange={(e) => setPartySize(Math.min(12, Math.max(1, Number(e.target.value))))}
+              className="w-16 text-center border rounded-md text-black h-[30px]"
+              min="1"
+              max="12"
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+
+        <div>
+          <label htmlFor="location" className="block text-sm font-medium mb-1">
+            Location
+          </label>
+          <input
+            type="text"
+            id="location"
+            placeholder="Anywhere"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            className="w-full p-2 border rounded-md text-black"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        </div>
+
+        <button
+          type="submit"
+          className="w-full bg-[#1a4d2e] text-white p-2 rounded-md hover:bg-[#143d24] transition-colors"
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+          Search Golf Getaways
+        </button>
+      </form>
+      {searchResults.length > 0 && (
+        <div className="mt-8">
+          <h2 className="text-2xl font-bold mb-4">Search Results</h2>
+          <ul>
+            {searchResults.map((result: any) => (
+              <li key={result.id} className="mb-2">
+                {result.name} - ${result.price} per person
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </main>
+  )
 }

@@ -25,3 +25,74 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Custom styles for the range input */
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 24px;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 24px;
+  cursor: pointer;
+  background: #d3d3d3;
+  border-radius: 12px;
+}
+
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 24px;
+  cursor: pointer;
+  background: #d3d3d3;
+  border-radius: 12px;
+}
+
+input[type="range"]::-ms-track {
+  width: 100%;
+  height: 24px;
+  cursor: pointer;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #ffffff url('/golf-ball.png') no-repeat center center;
+  background-size: cover;
+  cursor: pointer;
+  margin-top: 0;
+  border: 1px solid #1a4d2e;
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 24px;
+  width: 24px;
+  border: 1px solid #1a4d2e;
+  border-radius: 50%;
+  background: #ffffff url('/golf-ball.png') no-repeat center center;
+  background-size: cover;
+  cursor: pointer;
+}
+
+input[type="range"]::-ms-thumb {
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  background: #ffffff url('/golf-ball.png') no-repeat center center;
+  background-size: cover;
+  cursor: pointer;
+  border: 1px solid #1a4d2e;
+}
