@@ -3,18 +3,38 @@
 import { useState } from 'react'
 import Image from 'next/image'
 
+interface GolfCourse {
+  id: number;
+  name: string;
+  location: string;
+  price: number;
+  partySize: number;
+  website: string;
+  imageUrl: string;
+  description: string;
+}
+
 export default function Home() {
-  const [maxPrice, setMaxPrice] = useState(2500)
-  const [partySize, setPartySize] = useState(1)
+  const [maxPrice, setMaxPrice] = useState(5000)
+  const [partySize, setPartySize] = useState<number | 'any'>('any')
   const [location, setLocation] = useState('')
-  const [searchResults, setSearchResults] = useState([])
+  const [searchResults, setSearchResults] = useState<GolfCourse[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
-    const searchParams = { maxPrice, partySize, location }
+    setIsLoading(true)
+    setError('')
+    
+    const searchParams = { 
+      maxPrice, 
+      partySize, 
+      location: location || 'anywhere'
+    }
     
     try {
-      const response = await fetch('/api/search', {
+      const response = await fetch('http://localhost:3001/api/search', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,8 +50,15 @@ export default function Home() {
       setSearchResults(results)
     } catch (error) {
       console.error('Error during search:', error)
-      // Handle error (e.g., show error message to user)
+      setError('An error occurred while searching. Please try again.')
+    } finally {
+      setIsLoading(false)
     }
+  }
+
+  const handlePartySizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value
+    setPartySize(value === 'any' ? 'any' : parseInt(value, 10))
   }
 
   return (
@@ -76,19 +103,21 @@ export default function Home() {
 
           <div>
             <div className="h-6">
-              <label htmlFor="party-size" className="block text-sm font-medium">
+              <label htmlFor="party-size" className="block text-sm font-medium mb-1">
                 Party Size
               </label>
             </div>
-            <input
-              type="number"
+            <select
               id="party-size"
-              value={partySize}
-              onChange={(e) => setPartySize(Math.min(12, Math.max(1, Number(e.target.value))))}
-              className="w-16 text-center border rounded-md text-black h-[30px]"
-              min="1"
-              max="12"
-            />
+              value={partySize === 'any' ? 'any' : partySize.toString()}
+              onChange={handlePartySizeChange}
+              className="w-full p-2 border rounded-md text-black"
+            >
+              <option value="any">Any</option>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(size => (
+                <option key={size} value={size.toString()}>{size}</option>
+              ))}
+            </select>
           </div>
         </div>
 
@@ -109,17 +138,45 @@ export default function Home() {
         <button
           type="submit"
           className="w-full bg-[#1a4d2e] text-white p-2 rounded-md hover:bg-[#143d24] transition-colors"
+          disabled={isLoading}
         >
-          Search Golf Getaways
+          {isLoading ? 'Searching...' : 'Search Golf Getaways'}
         </button>
       </form>
+
+      {error && <p className="text-red-500 mt-4">{error}</p>}
+
       {searchResults.length > 0 && (
-        <div className="mt-8">
+        <div className="mt-8 w-full max-w-3xl">
           <h2 className="text-2xl font-bold mb-4">Search Results</h2>
-          <ul>
-            {searchResults.map((result: any) => (
-              <li key={result.id} className="mb-2">
-                {result.name} - ${result.price} per person
+          <ul className="space-y-4">
+            {searchResults.map((course) => (
+              <li key={course.id}>
+                <a 
+                  href={course.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block bg-gray-800 p-4 rounded-md hover:bg-gray-700 transition-colors duration-200"
+                >
+                  <div className="flex">
+                    <div className="flex-1 pr-4">
+                      <h3 className="text-xl font-semibold mb-2">{course.name}</h3>
+                      <p className="text-gray-300 mb-2">{course.location}</p>
+                      <p className="mb-2">Price: ${course.price} per person</p>
+                      <p className="mb-2">Party Size: {course.partySize}</p>
+                      <p className="text-sm text-gray-400">{course.description}</p>
+                    </div>
+                    <div className="w-40 h-40 relative flex-shrink-0">
+                      <Image
+                        src={course.imageUrl}
+                        alt={course.name}
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-md"
+                      />
+                    </div>
+                  </div>
+                </a>
               </li>
             ))}
           </ul>
