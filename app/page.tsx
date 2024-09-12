@@ -34,6 +34,8 @@ export default function Home() {
     }
 
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+
+    console.log(apiUrl);
     
     try {
       const response = await fetch(`${apiUrl}/api/search`, {
