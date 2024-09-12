@@ -30,7 +30,7 @@ export default function Home() {
     const searchParams = { 
       maxPrice, 
       partySize, 
-      location // Now this will be an empty string by default
+      location
     }
 
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
