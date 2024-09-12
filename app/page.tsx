@@ -36,7 +36,7 @@ export default function Home() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
     
     try {
-      const response = await fetch(`${apiUrl}api/search`, {
+      const response = await fetch(`${apiUrl}/api/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
