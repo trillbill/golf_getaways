@@ -30,11 +30,13 @@ export default function Home() {
     const searchParams = { 
       maxPrice, 
       partySize, 
-      location: location || 'anywhere'
+      location // Now this will be an empty string by default
     }
+
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
     
     try {
-      const response = await fetch('http://localhost:3001/api/search', {
+      const response = await fetch(`${apiUrl}api/search`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
