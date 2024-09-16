@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import Head from 'next/head';
 
 interface GolfCourse {
   id: number;
@@ -13,12 +12,6 @@ interface GolfCourse {
   website: string;
   imageUrl: string;
   description: string;
-}
-
-declare global {
-  interface Window {
-    adsbygoogle: Array<Record<string, unknown>>;
-  }
 }
 
 export default function Home() {
@@ -70,37 +63,8 @@ export default function Home() {
     setPartySize(value === 'any' ? 'any' : parseInt(value, 10))
   }
 
-  // const AdSenseAd = () => {
-  //   useEffect(() => {
-  //     try {
-  //       if (typeof window !== 'undefined') {
-  //         (window.adsbygoogle = window.adsbygoogle || []).push({});
-  //       }
-  //     } catch (err) {
-  //       console.error('AdSense error:', err);
-  //     }
-  //   }, []);
-
-  //   return (
-  //     <ins
-  //       className="adsbygoogle"
-  //       style={{ display: 'block', textAlign: 'center', margin: 'auto' }}
-  //       data-ad-client="pub-2339342939361274"
-  //       data-ad-slot="YYYYYYYYYY"
-  //       data-ad-format="auto"
-  //       data-full-width-responsive="true"
-  //     ></ins>
-  //   );
-  // };
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-black text-white">
-      <Head>
-        <title>Golf Getaways</title>
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2339342939361274"
-          crossOrigin="anonymous"
-        ></script>
-      </Head>
       <div className="mb-8">
         <Image
           src="/homepage-logo.png"
