@@ -15,7 +15,7 @@ interface GolfCourse {
 }
 
 export default function Home() {
-  const [maxPrice, setMaxPrice] = useState(5000)
+  const [maxPrice, setMaxPrice] = useState(500) // Default value set to 500
   const [partySize, setPartySize] = useState<number | 'any'>('any')
   const [location, setLocation] = useState('')
   const [searchResults, setSearchResults] = useState<GolfCourse[]>([])
@@ -86,16 +86,16 @@ export default function Home() {
               <div 
                 className="absolute inset-0 rounded-full" 
                 style={{
-                  background: `linear-gradient(to right, #1a4d2e 0%, #1a4d2e ${maxPrice / 50}%, #d3d3d3 ${maxPrice / 50}%, #d3d3d3 100%)`,
+                  background: `linear-gradient(to right, #1a4d2e 0%, #1a4d2e ${maxPrice / 10}%, #d3d3d3 ${maxPrice / 10}%, #d3d3d3 100%)`,
                   pointerEvents: 'none'
                 }}
               ></div>
               <input
                 type="range"
                 id="price-range"
-                min="100"
-                max="5000"
-                step="100"
+                min="0"
+                max="1000"
+                step="10"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(Number(e.target.value))}
                 className="w-full appearance-none bg-transparent cursor-pointer relative z-10"
