@@ -70,29 +70,28 @@ export default function Home() {
     setPartySize(value === 'any' ? 'any' : parseInt(value, 10))
   }
 
-  const AdSenseAd = () => {
-    useEffect(() => {
-      try {
-        if (typeof window !== 'undefined') {
-          (window.adsbygoogle = window.adsbygoogle || []).push({});
-        }
-      } catch (err) {
-        console.error('AdSense error:', err);
-      }
-    }, []);
+  // const AdSenseAd = () => {
+  //   useEffect(() => {
+  //     try {
+  //       if (typeof window !== 'undefined') {
+  //         (window.adsbygoogle = window.adsbygoogle || []).push({});
+  //       }
+  //     } catch (err) {
+  //       console.error('AdSense error:', err);
+  //     }
+  //   }, []);
 
-    return (
-      <ins
-        className="adsbygoogle"
-        style={{ display: 'block', textAlign: 'center', margin: 'auto' }}
-        data-ad-client="pub-2339342939361274"
-        data-ad-slot="YYYYYYYYYY"
-        data-ad-format="auto"
-        data-full-width-responsive="true"
-      ></ins>
-    );
-  };
-
+  //   return (
+  //     <ins
+  //       className="adsbygoogle"
+  //       style={{ display: 'block', textAlign: 'center', margin: 'auto' }}
+  //       data-ad-client="pub-2339342939361274"
+  //       data-ad-slot="YYYYYYYYYY"
+  //       data-ad-format="auto"
+  //       data-full-width-responsive="true"
+  //     ></ins>
+  //   );
+  // };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-black text-white">
