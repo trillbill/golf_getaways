@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { preloadStyle } from 'next/dist/server/app-render/entry-base';
 
 interface GolfCourse {
   id: number;
@@ -16,7 +17,6 @@ interface GolfCourse {
 
 export default function Home() {
   const [maxPrice, setMaxPrice] = useState(500) // Default value set to 500
-  const [partySize, setPartySize] = useState<number | 'any'>('any')
   const [location, setLocation] = useState('')
   const [searchResults, setSearchResults] = useState<GolfCourse[]>([])
   const [isLoading, setIsLoading] = useState(false)
@@ -27,11 +27,7 @@ export default function Home() {
     setIsLoading(true)
     setError('')
     
-    const searchParams = { 
-      maxPrice, 
-      partySize, 
-      location
-    }
+    const searchParams = { maxPrice, location, partySize: "any" }
 
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
       
@@ -58,11 +54,6 @@ export default function Home() {
     }
   }
 
-  const handlePartySizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value
-    setPartySize(value === 'any' ? 'any' : parseInt(value, 10))
-  }
-
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-black text-white">
       <div className="mb-8">
@@ -75,51 +66,30 @@ export default function Home() {
         />
       </div>
       <form onSubmit={handleSearch} className="w-full max-w-md space-y-6">
-        <div className="flex space-x-4">
-          <div className="flex-1">
-            <div className="h-6">
-              <label htmlFor="price-range" className="block text-sm font-medium">
-                Max Price Per Person: ${maxPrice}
-              </label>
-            </div>
-            <div className="relative">
-              <div 
-                className="absolute inset-0 rounded-full" 
-                style={{
-                  background: `linear-gradient(to right, #1a4d2e 0%, #1a4d2e ${maxPrice / 10}%, #d3d3d3 ${maxPrice / 10}%, #d3d3d3 100%)`,
-                  pointerEvents: 'none'
-                }}
-              ></div>
-              <input
-                type="range"
-                id="price-range"
-                min="0"
-                max="1000"
-                step="10"
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="w-full appearance-none bg-transparent cursor-pointer relative z-10"
-              />
-            </div>
+        <div>
+          <div className="h-6">
+            <label htmlFor="price-range" className="block text-sm font-medium">
+              Max Price Per Person: ${maxPrice}
+            </label>
           </div>
-
-          <div>
-            <div className="h-6">
-              <label htmlFor="party-size" className="block text-sm font-medium mb-1">
-                Party Size
-              </label>
-            </div>
-            <select
-              id="party-size"
-              value={partySize === 'any' ? 'any' : partySize.toString()}
-              onChange={handlePartySizeChange}
-              className="w-full p-2 border rounded-md text-black"
-            >
-              <option value="any">Any</option>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(size => (
-                <option key={size} value={size.toString()}>{size}</option>
-              ))}
-            </select>
+          <div className="relative">
+            <div 
+              className="absolute inset-0 rounded-full" 
+              style={{
+                background: `linear-gradient(to right, #1a4d2e 0%, #1a4d2e ${maxPrice / 10}%, #d3d3d3 ${maxPrice / 10}%, #d3d3d3 100%)`,
+                pointerEvents: 'none'
+              }}
+            ></div>
+            <input
+              type="range"
+              id="price-range"
+              min="0"
+              max="1000"
+              step="10"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(Number(e.target.value))}
+              className="w-full appearance-none bg-transparent cursor-pointer relative z-10"
+            />
           </div>
         </div>
 
