@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
-import { preloadStyle } from 'next/dist/server/app-render/entry-base';
 
 interface GolfCourse {
   id: number;
