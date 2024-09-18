@@ -2,7 +2,7 @@ import React from 'react';
 
 const locations = [
   'North Carolina',
-  // 'South Carolina',
+  'South Carolina',
   // 'Georgia',
   // 'Florida',
   // 'Arizona',

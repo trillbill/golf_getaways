@@ -140,8 +140,15 @@ export default function Home() {
               <li key={course.id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
                 <a href={course.website} target="_blank" rel="noopener noreferrer" className="block">
                   <div className="p-6">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start">
+                      <Image 
+                        src={course.imageUrl} 
+                        alt={course.name} 
+                        width={200} 
+                        height={133} 
+                        className="w-full sm:w-auto rounded-md object-cover mb-4 sm:mb-0 sm:ml-4 order-1 sm:order-2" 
+                      />
+                      <div className="flex-1 order-2 sm:order-1">
                         <h3 className="text-xl font-semibold mb-2">{course.name}</h3>
                         <p className="text-gray-400 mb-2">{course.location}</p>
                         <p className="text-xl font-bold text-green-500 mb-4">
@@ -155,7 +162,6 @@ export default function Home() {
                           ))}
                         </div>
                       </div>
-                      <Image src={course.imageUrl} alt={course.name} width={200} height={133} className="rounded-md object-cover" />
                     </div>
                     <button 
                       onClick={(e) => {
