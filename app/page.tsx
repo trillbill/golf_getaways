@@ -35,6 +35,7 @@ export default function Home() {
   const [error, setError] = useState('')
   const [expandedCard, setExpandedCard] = useState<number | null>(null)
   const [sortOrder, setSortOrder] = useState<'lowToHigh' | 'highToLow'>('lowToHigh');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -97,6 +98,10 @@ export default function Home() {
     });
   };
 
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-black text-white">
       <div className="mb-8">
@@ -156,22 +161,38 @@ export default function Home() {
       
       {sortCourses(searchResults).length > 0 && (
         <div className="mt-8 w-full max-w-4xl">
-          <div className="flex justify-between items-end mb-4"> {/* Changed items-center to items-end */}
+          <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold">Search Results ({searchResults.length})</h2>
             <div className="relative">
-              <select 
-                value={sortOrder} 
-                onChange={(e) => setSortOrder(e.target.value as 'lowToHigh' | 'highToLow')}
-                className="bg-gray-800 text-white border border-gray-600 rounded-md p-2 pl-8 pr-8"
-              >
-                <option value="lowToHigh">Price: Low to High</option>
-                <option value="highToLow">Price: High to Low</option>
-              </select>
-              <span className="absolute left-2 top-1/2 transform -translate-y-1/2">
-                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <button onClick={toggleDropdown} className="flex items-center bg-gray-800 text-white rounded-md p-2">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
                 </svg>
-              </span>
+              </button>
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-gray-800 rounded-md shadow-lg z-10">
+                  <div className="p-2">
+                    <button 
+                      onClick={() => {
+                        setSortOrder('lowToHigh');
+                        setIsDropdownOpen(false); // Close dropdown after selection
+                      }}
+                      className="block w-full text-left text-white hover:bg-gray-700 p-2 rounded-md"
+                    >
+                      Price: Low to High
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setSortOrder('highToLow');
+                        setIsDropdownOpen(false); // Close dropdown after selection
+                      }}
+                      className="block w-full text-left text-white hover:bg-gray-700 p-2 rounded-md"
+                    >
+                      Price: High to Low
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <ul className="space-y-6">
