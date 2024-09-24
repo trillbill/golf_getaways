@@ -9,7 +9,7 @@ interface GolfCourse {
   id: number;
   name: string;
   location: string;
-  price: number;
+  price: { min: number; max: number };
   partySize: number;
   website: string;
   imageUrl: string;
@@ -34,6 +34,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [expandedCard, setExpandedCard] = useState<number | null>(null)
+  const [sortOrder, setSortOrder] = useState<'lowToHigh' | 'highToLow'>('lowToHigh');
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -74,6 +75,27 @@ export default function Home() {
   const toggleCardExpansion = (id: number) => {
     setExpandedCard(expandedCard === id ? null : id)
   }
+
+  const formatPrice = (price: { min: number; max: number }) => {
+    if (price.min === price.max) {
+      return `$${price.min}/person`;
+    } else {
+      return `$${price.min} - $${price.max}/person`;
+    }
+  };
+
+  const sortCourses = (courses: GolfCourse[]) => {
+    return courses.sort((a, b) => {
+      const priceA = a.price.min;
+      const priceB = b.price.min;
+
+      if (sortOrder === 'lowToHigh') {
+        return priceA - priceB; // Sort ascending
+      } else {
+        return priceB - priceA; // Sort descending
+      }
+    });
+  };
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-8 bg-black text-white">
@@ -132,11 +154,28 @@ export default function Home() {
 
       {error && <p className="text-red-500 mt-4">{error}</p>}
       
-      {searchResults.length > 0 && (
+      {sortCourses(searchResults).length > 0 && (
         <div className="mt-8 w-full max-w-4xl">
-          <h2 className="text-2xl font-bold mb-4">Search Results ({searchResults.length})</h2>
+          <div className="flex justify-between items-end mb-4"> {/* Changed items-center to items-end */}
+            <h2 className="text-xl font-bold">Search Results ({searchResults.length})</h2>
+            <div className="relative">
+              <select 
+                value={sortOrder} 
+                onChange={(e) => setSortOrder(e.target.value as 'lowToHigh' | 'highToLow')}
+                className="bg-gray-800 text-white border border-gray-600 rounded-md p-2 pl-8 pr-8"
+              >
+                <option value="lowToHigh">Price: Low to High</option>
+                <option value="highToLow">Price: High to Low</option>
+              </select>
+              <span className="absolute left-2 top-1/2 transform -translate-y-1/2">
+                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+              </span>
+            </div>
+          </div>
           <ul className="space-y-6">
-            {searchResults.map((course) => (
+            {sortCourses(searchResults).map((course) => (
               <li key={course.id} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg">
                 <a href={course.website} target="_blank" rel="noopener noreferrer" className="block">
                   <div className="p-6">
@@ -144,15 +183,15 @@ export default function Home() {
                       <Image 
                         src={course.imageUrl} 
                         alt={course.name} 
-                        width={200} 
-                        height={133} 
+                        width={180} 
+                        height={120} 
                         className="w-full sm:w-auto rounded-md object-cover mb-4 sm:mb-0 sm:ml-4 order-1 sm:order-2" 
                       />
                       <div className="flex-1 order-2 sm:order-1">
                         <h3 className="text-xl font-semibold mb-2">{course.name}</h3>
                         <p className="text-gray-400 mb-2">{course.location}</p>
                         <p className="text-xl font-bold text-green-500 mb-4">
-                          ${course.price}/person <span className="text-sm text-white font-normal">(party of {course.partySize})</span>
+                          {formatPrice(course.price)} <span className="text-sm text-white font-normal">(party of {course.partySize})</span>
                         </p>
                         <div className="flex flex-wrap gap-2 mt-4">
                           <span className="bg-blue-600 text-white px-2 py-1 rounded-full text-sm">{course.numberOfRounds} Rounds</span>
@@ -181,15 +220,16 @@ export default function Home() {
                 {/* Expanded content remains outside the clickable area */}
                 {expandedCard === course.id && (
                   <div className="px-6 pb-6">
+                    <p className="text-gray-400 mb-4">{course.description}</p>
                     <h4 className="font-semibold mb-2">Included Courses:</h4>
                     <ul className="space-y-2">
-                      {course.courses.map((course, index) => (
+                      {course.courses.map((courseDetail, index) => (
                         <li key={index} className="bg-gray-700 p-3 rounded-md">
-                          <h5 className="font-medium">{course.name}</h5>
+                          <h5 className="font-medium">{courseDetail.name}</h5>
                           <p className="text-sm text-gray-400">
-                            Par: {course.par} | Length: {course.length} yards | 
-                            Rating: {course.rating} | Slope: {course.slope} | 
-                            Holes: {course.holes}
+                            Par: {courseDetail.par} | Length: {courseDetail.length} yards | 
+                            Rating: {courseDetail.rating} | Slope: {courseDetail.slope} | 
+                            Holes: {courseDetail.holes}
                           </p>
                         </li>
                       ))}

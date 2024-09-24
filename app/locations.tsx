@@ -4,11 +4,11 @@ const locations = [
   'North Carolina',
   'South Carolina',
   // 'Georgia',
-  // 'Florida',
-  // 'Arizona',
-  // 'California',
+  'Florida',
+  'Arizona',
+  'California',
   // 'Texas',
-  // 'New York',
+  'New York',
 ];
 
 const SearchBar = ({ onSearch }: { onSearch: (value: string) => void }) => {
