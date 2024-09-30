@@ -27,6 +27,8 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* <meta name="google-adsense-account" content="ca-pub-2339342939361274" /> */}
+        <meta name="description" content="Golf Getaways helps you find your perfect golf trip within your budget" />
+        <meta name="keywords" content="golf, getaways, travel, courses, vacations, packages, stay and play, golfing, resort" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

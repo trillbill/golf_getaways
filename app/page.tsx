@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid'
+import { ChevronDownIcon, ChevronUpIcon, EnvelopeIcon } from '@heroicons/react/24/solid'
 import SearchBar from './locations'  // Import the SearchBar component
 
 interface GolfCourse {
@@ -159,6 +159,14 @@ export default function Home() {
         >
           {isLoading ? 'Searching...' : 'Search Golf Getaways'}
         </button>
+
+        {/* Centered Email Icon Button */}
+        <div className="flex justify-center mt-2">
+          <a href="mailto:support@golfgetaways.io" className="inline-flex items-center border border-white bg-black text-white p-2 rounded-md">
+            <EnvelopeIcon className="w-6 h-6 mr-2" /> {/* Increased icon size */}
+            Contact Us
+          </a>
+        </div>
       </form>
 
       {error && <p className="text-red-500 mt-4">{error}</p>}
@@ -210,7 +218,7 @@ export default function Home() {
                         alt={course.name} 
                         width={180} // Set a fixed width
                         height={120} 
-                        className="w-48 h-auto rounded-md object-cover mb-4 sm:mb-0 sm:ml-4 order-1 sm:order-2" // Ensure consistent height
+                        className="w-full h-auto rounded-md object-cover mb-4 sm:w-[180px] sm:h-[120px] sm:mb-0 sm:ml-4 order-1 sm:order-2" // Updated for responsive sizing
                       />
                       <div className="flex-1 order-2 sm:order-1">
                         <h3 className="text-xl font-semibold mb-2">{course.name}</h3>
