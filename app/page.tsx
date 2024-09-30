@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid'
 import SearchBar from './locations'  // Import the SearchBar component
@@ -36,6 +36,10 @@ export default function Home() {
   const [expandedCard, setExpandedCard] = useState<number | null>(null)
   const [sortOrder, setSortOrder] = useState<'lowToHigh' | 'highToLow'>('lowToHigh');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    handleSearch(new Event('load')); // Trigger search on page load
+  }, []); // Empty dependency array to run once on mount
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -204,9 +208,9 @@ export default function Home() {
                       <Image 
                         src={course.imageUrl} 
                         alt={course.name} 
-                        width={180} 
+                        width={180} // Set a fixed width
                         height={120} 
-                        className="w-full sm:w-auto rounded-md object-cover mb-4 sm:mb-0 sm:ml-4 order-1 sm:order-2" 
+                        className="w-48 h-auto rounded-md object-cover mb-4 sm:mb-0 sm:ml-4 order-1 sm:order-2" // Ensure consistent height
                       />
                       <div className="flex-1 order-2 sm:order-1">
                         <h3 className="text-xl font-semibold mb-2">{course.name}</h3>
@@ -262,6 +266,11 @@ export default function Home() {
           </ul>
         </div>
       )}
+      {/* Contact Section */}
+      <div className="mt-8 text-center">
+        <h2 className="text-xl font-bold">Contact Us</h2>
+        <p className="text-gray-400"><a href="mailto:support@golfgetaways.io" className="text-white">{`support@golfgetaways.io`}</a></p>
+      </div>
     </main>
   )
 }
