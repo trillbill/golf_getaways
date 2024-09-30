@@ -38,7 +38,7 @@ export default function Home() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
-    handleSearch(new Event('load')); // Trigger search on page load
+    handleSearch({ preventDefault: () => {}, currentTarget: null } as unknown as React.FormEvent); // Trigger search on page load
   }, []); // Empty dependency array to run once on mount
 
   const handleSearch = async (e: React.FormEvent) => {
