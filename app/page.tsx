@@ -277,7 +277,30 @@ export default function Home() {
       {/* Contact Section */}
       <div className="mt-8 text-center">
         <h2 className="text-xl font-bold">Contact Us</h2>
-        <p className="text-gray-400"><a href="mailto:support@golfgetaways.io" className="text-white">{`support@golfgetaways.io`}</a></p>
+        <p className="text-gray-400">
+          <a href="mailto:support@golfgetaways.io" className="text-white">{`support@golfgetaways.io`}</a>
+        </p>
+      </div>
+
+      <div style={{ color: 'white', fontSize: '0.8em', textAlign: 'center', marginTop: '20px' }}>
+        <h3 className="font-bold">Privacy Policy</h3>
+        <p>Your privacy is important to us. This privacy policy explains how we handle your information when you visit our website.</p>
+        <ul className="list-disc list-inside">
+          <li>We do not collect any personal user data. The only data collected may be through your browser, such as cookie data.</li>
+          <li>We do not use personal information since we do not collect any.</li>
+        </ul>
+        <p>We may update our privacy policy from time to time. We will notify you of any changes by posting the new privacy policy on this page.</p>
+        <p>If you have any questions about this privacy policy, please contact us at <a href="mailto:support@golfgetaways.io" className="text-white">support@golfgetaways.io</a>.</p>
+
+        <h3 className="font-bold mt-4">Terms and Conditions</h3>
+        <p>Welcome to golfgetaways.io. By accessing or using our website, you agree to be bound by these Terms and Conditions.</p>
+        <ul className="list-disc list-inside">
+          <li>You agree to use the site only for lawful purposes and in a way that does not infringe on the rights of others.</li>
+          <li>All content on this site, including text, graphics, and logos, is the property of golfgetaways.io and is protected by copyright laws.</li>
+          <li>In no event shall golfgetaways.io be liable for any damages arising from the use of this site.</li>
+        </ul>
+        <p>We may revise these Terms and Conditions from time to time. We will notify you of any changes by posting the new Terms on this page.</p>
+        <p>If you have any questions about these Terms, please contact us at <a href="mailto:support@golfgetaways.io" className="text-white">support@golfgetaways.io</a>.</p>
       </div>
     </main>
   )
